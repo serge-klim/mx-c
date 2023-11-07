@@ -1,0 +1,147 @@
+EXPORTS
+        rmax_cleanup = proxy_rmax_cleanup                                               @1  
+        rmax_deregister_memory = proxy_rmax_deregister_memory                           @2  
+        rmax_get_version = proxy_rmax_get_version                                       @9  
+        rmax_get_version_string = proxy_rmax_get_version_string                         @10  
+        rmax_in_attach_flow = proxy_rmax_in_attach_flow                                 @11  
+        rmax_in_detach_flow = proxy_rmax_in_detach_flow                                 @15  
+        rmax_in_create_stream = proxy_rmax_in_create_stream                             @13  
+        rmax_in_destroy_stream = proxy_rmax_in_destroy_stream                           @14  
+        rmax_in_get_next_chunk = proxy_rmax_in_get_next_chunk                           @17  
+        rmax_in_query_buffer_size = proxy_rmax_in_query_buffer_size                     @18  
+;       rmax_init_version = proxy_rmax_init_version                                     @19
+;;;;see below
+        rmax_out_cancel_unsent_chunks = proxy_rmax_out_cancel_unsent_chunks             @20  
+        rmax_out_commit_chunk = proxy_rmax_out_commit_chunk                             @22  
+        rmax_out_commit_chunk_to = proxy_rmax_out_commit_chunk_to                       @23  
+        rmax_out_create_gen_stream = proxy_rmax_out_create_gen_stream                   @24  
+        rmax_out_destroy_stream = proxy_rmax_out_destroy_stream                         @27  
+        rmax_register_memory = proxy_rmax_register_memory                               @36  
+
+;;;;new 1.31 
+        rmax_init_version = proxy_rmax_init_version                                     @19  
+        rmax_init = proxy_rmax_init                                                     @200
+        diversion_rmax_get_version_long                                                 @201
+
+;        diversion_rmax_init                                                             @210
+;        diversion_rmax_init_version                                                     @212
+;        diversion_rmax_get_version                                                      @213
+
+        
+        
+      ; rmax_device_get_caps = proxy_rmax_device_get_caps              @3  
+      ; rmax_doca_set_pd = proxy_rmax_doca_set_pd                      @4  
+      ; rmax_free_supported_devices_list = proxy_rmax_free_supported_devices_list       @5  
+      ; rmax_get_event_channel = proxy_rmax_get_event_channel                           @6  
+      ; rmax_get_supported_devices_list = proxy_rmax_get_supported_devices_list         @7  
+      ; rmax_get_time = proxy_rmax_get_time                                             @8  
+      ; rmax_in_attach_flow_ex = proxy_rmax_in_attach_flow_ex                           @12  
+      ; rmax_in_detach_flow_ex = proxy_rmax_in_detach_flow_ex                           @16        
+      ; rmax_in_query_buffer_size = proxy_rmax_in_query_buffer_size                     @18  
+      ; rmax_out_commit = proxy_rmax_out_commit        @21  
+      ; rmax_out_create_stream = proxy_rmax_out_create_stream        @25  
+      ; rmax_out_create_stream_ex = proxy_rmax_out_create_stream_ex        @26  
+      ; rmax_out_get_next_chunk = proxy_rmax_out_get_next_chunk        @28  
+      ; rmax_out_get_next_chunk_dynamic = proxy_rmax_out_get_next_chunk_dynamic        @29  
+      ; rmax_out_modify_common_stream_ecn = proxy_rmax_out_modify_common_stream_ecn        @30  
+      ; rmax_out_modify_common_stream_qos_dscp = proxy_rmax_out_modify_common_stream_qos_dscp        @31  
+      ; rmax_out_modify_gen_stream_rate = proxy_rmax_out_modify_gen_stream_rate        @32  
+      ; rmax_out_query_address = proxy_rmax_out_query_address        @33  
+      ; rmax_out_query_chunk_num = proxy_rmax_out_query_chunk_num        @34  
+      ; rmax_out_skip_chunks = proxy_rmax_out_skip_chunks        @35  
+      ; rmax_register_memory_ex = proxy_rmax_register_memory_ex        @37  
+      ; rmax_request_notification = proxy_rmax_request_notification        @38  
+      ; rmax_set_clock = proxy_rmax_set_clock        @39  
+      ; rmax_set_device_config = proxy_rmax_set_device_config        @40  
+      ; rmax_unset_device_config = proxy_rmax_unset_device_config        @41  
+
+
+
+       log_rmax_cleanup                                                                   @701  
+       log_rmax_deregister_memory                                                         @702  
+       log_rmax_get_version                                                               @709  
+       log_rmax_get_version_string                                                        @710  
+       log_rmax_in_attach_flow                                                            @711  
+       log_rmax_in_detach_flow                                                            @715  
+       log_rmax_in_create_stream                                                          @713  
+       log_rmax_in_destroy_stream                                                         @714  
+       log_rmax_in_get_next_chunk                                                         @717  
+       log_rmax_in_query_buffer_size                                                      @718  
+       log_rmax_init_version                                                              @719  
+       log_rmax_out_cancel_unsent_chunks                                                  @720  
+       log_rmax_out_commit_chunk                                                          @722  
+       log_rmax_out_commit_chunk_to                                                       @723  
+       log_rmax_out_create_gen_stream                                                     @724  
+       log_rmax_out_destroy_stream                                                        @727  
+       log_rmax_register_memory                                                           @736  
+
+       log_rmax_init                                                                      @798
+       log_error_rmax_out_commit_chunk                                                    @799
+       
+       
+       rmax_out_create_gen_stream_extended                                                @993
+
+
+       shutdown_hack                                                                      @997
+       rmax_in_get_next_chunk_shutdown_hack                                               @998
+       rmax_in_attach_flow_ignore_port0                                                   @999
+
+
+
+       dummy_rmax_init_version                                                           @1000
+       dummy_rmax_register_memory                                                        @1001
+       dummy_deregister_memory                                                           @1002
+       dummy_rmax_out_create_gen_stream                                                  @1003
+       dummy_rmax_out_destroy_stream                                                     @1004
+       dummy_rmax_out_commit_chunk                                                       @1022  
+;      dummy_rmax_out_commit_chunk_to                                                    @1023  
+
+
+        rio_rmax_cleanup                                                                 @1101
+        rio_rmax_deregister_memory                                                       @1102        
+        rio_rmax_init_version                                                            @1119
+        rio_rmax_out_cancel_unsent_chunks                                                @1120
+        rio_rmax_out_commit_chunk                                                        @1122
+        rio_rmax_out_create_gen_stream                                                   @1124  
+        rio_rmax_out_destroy_stream                                                      @1127
+        rio_rmax_register_memory                                                         @1136        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
