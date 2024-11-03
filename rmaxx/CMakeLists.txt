@@ -1,4 +1,5 @@
-﻿find_package(Rivermax REQUIRED)
+﻿#find_package(Rivermax MODULE REQUIRED)
+find_package(Rivermax 1.51.6 REQUIRED)
 find_package(Boost COMPONENTS program_options log log_setup filesystem unit_test_framework REQUIRED )
 
 

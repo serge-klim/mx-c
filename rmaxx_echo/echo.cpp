@@ -132,28 +132,32 @@ void run(boost::program_options::variables_map const& options)
    BOOST_LOG_TRIVIAL(info)
              << "################################################\n"
              << "## Rivermax library version:    " << rmax_get_version_string() << "    ##\n"
-             << "## Generic sender version:      " << RMAX_API_MAJOR << "." << RMAX_API_MINOR
-             << "." << RMAX_RELEASE_VERSION << "." << RMAX_BUILD << "    ##\n"
+             << "## Generic sender version:      " << RMX_VERSION_MAJOR << "." << RMX_VERSION_MINOR
+             << "." << RMX_VERSION_PATCH   << "    ##\n"
              << "################################################\n";
 
    unsigned int api_major;
    unsigned int api_minor;
    unsigned int release;
-   unsigned int build;
 
    /* Verify version mismatch */
-   rmax_get_version(&api_major, &api_minor, &release, &build);
-   if (api_major != RMAX_API_MAJOR || api_minor < RMAX_API_MINOR)
+   rmax_get_version(&api_major, &api_minor, &release);
+   if (api_major != RMX_VERSION_MAJOR || api_minor < RMX_VERSION_MINOR)
       throw std::runtime_error{"Incompatible Rivermax version"};
 
-   if (api_minor > RMAX_API_MINOR || release != RMAX_RELEASE_VERSION || build != RMAX_BUILD)
+   if (api_minor > RMX_VERSION_MINOR || release != RMX_VERSION_MINOR)
       BOOST_LOG_TRIVIAL(warning) << "\nWarning - Rivermax versions are not aligned";
+
+   //rt_set_realtime_class();
 
    auto sig_handler = [](const int /*signal*/) {
       stop_token() = true;
    };
    std::signal(SIGINT, sig_handler);
    std::signal(SIGBREAK, sig_handler);
+   if (auto status = rmx_enable_system_signal_handling(); status != RMAX_OK)
+      throw std::runtime_error{std::string{"rmx_enable_system_signal_handling failed : "} + rmaxx::to_string(status)};
+ 
    [[maybe_unused]] auto sentry = rmaxx::initialize();
 
    //in_addr in_dev_addr;

@@ -67,6 +67,81 @@ constexpr char const* to_string(rmax_status_t status) noexcept
    return "unknow rmax_status_t";
 }
 
+constexpr char const* to_string(rmx_status status) noexcept
+{
+  switch (status) {
+  /** Operation completed successfully */
+     case RMX_OK: return "RMX_OK";
+
+  /* Functional error codes */
+
+  /**@{*/
+  /** Functional error */
+     case RMX_UNKNOWN_ISSUE   :return "RMX_UNKNOWN_ISSUE";;
+     case RMX_NO_HW_RESOURCES   :return "RMX_NO_HW_RESOURCES  ";
+     case RMX_NO_FREE_CHUNK   :return "RMX_NO_FREE_CHUNK   ";
+     case RMX_NO_CHUNK_TO_SEND  :return "RMX_NO_CHUNK_TO_SEND  ";
+     case RMX_HW_SEND_QUEUE_IS_FULL :return "RMX_HW_SEND_QUEUE_IS_FULL ";
+     case RMX_NO_MEMORY    :return "RMX_NO_MEMORY    ";
+     case RMX_NOT_INITIALIZED   :return "RMX_NOT_INITIALIZED  ";
+     case RMX_NO_DEVICE    :return "RMX_NO_DEVICE    ";
+     case RMX_BUSY     :return "RMX_BUSY     ";
+     case RMX_CANCELLED    :return "RMX_CANCELLED    ";
+     case RMX_HW_COMPLETION_ISSUE  :return "RMX_HW_COMPLETION_ISSUE ";
+     case RMX_LICENSE_ISSUE   :return "RMX_LICENSE_ISSUE   ";
+     case RMX_NO_ATTACH    :return "RMX_NO_ATTACH    ";
+     case RMX_STEERING_ISSUE   :return "RMX_STEERING_ISSUE   ";
+     case RMX_CHECKSUM_ISSUE   :return "RMX_CHECKSUM_ISSUE   ";
+     case RMX_DESTINATION_UNREACHABLE :return "RMX_DESTINATION_UNREACHABLE";
+     case RMX_MEMORY_REGISTRATION:  return "RMX_MEMORY_REGISTRATION ";
+  /**@}*/
+
+  /* Environment/system error codes */
+
+  /** Missing driver or underlying application */
+      case RMX_NO_DEPENDENCY: return "RMX_NO_DEPENDENCY";
+ 
+  /* Performance related error codes */
+ 
+  /** For example, if exceeds link rate limit */
+    case RMX_EXCEEDS_LIMIT: return "RMX_EXCEEDS_LIMIT";
+
+  /* Capability error codes */
+  
+  /** Not supported by Rivermax */
+    case RMX_UNSUPPORTED: return "RMX_UNSUPPORTED";
+  /** Clock type not supported by the device in use */
+    case RMX_CLOCK_TYPE_NOT_SUPPORTED: return "RMX_CLOCK_TYPE_NOT_SUPPORTED";
+  /** Device doesn't support PTP real time clock */
+    case RMX_UNSUPPORTED_PTP_RT_CLOCK_DEVICE: return "RMX_UNSUPPORTED_PTP_RT_CLOCK_DEVICE";
+  /** Underlying functionality is not implemented */
+    case RMX_NOT_IMPLEMENTED: return "RMX_NOT_IMPLEMENTED";
+  /** Not supported method was called */
+    case RMX_METHOD_NOT_SUPPORTED: return "RMX_METHOD_NOT_SUPPORTED";
+  /** Unsupported value for environment variable */
+    case RMX_UNSUPPORTED_ENVIRONMENT_VALUE: return "RMX_UNSUPPORTED_ENVIRONMENT_VALUE";
+
+  /* Bad input codes */
+
+    /**@{*/
+    /** Invalid function parameter */
+    case RMX_INVALID_PARAM_MIX : return "RMX_INVALID_PARAM_MIX";
+    case RMX_INVALID_PARAM_1  : return "RMX_INVALID_PARAM_1";
+    case RMX_INVALID_PARAM_2  : return "RMX_INVALID_PARAM_2";
+    case RMX_INVALID_PARAM_3  : return "RMX_INVALID_PARAM_3";
+    case RMX_INVALID_PARAM_4  : return "RMX_INVALID_PARAM_4";
+    case RMX_INVALID_PARAM_5  : return "RMX_INVALID_PARAM_5";
+    case RMX_INVALID_PARAM_6  : return "RMX_INVALID_PARAM_6";
+    case RMX_INVALID_PARAM_7  : return "RMX_INVALID_PARAM_7";
+    case RMX_INVALID_PARAM_8  : return "RMX_INVALID_PARAM_8";
+    case RMX_INVALID_PARAM_9  : return "RMX_INVALID_PARAM_9";
+    case RMX_INVALID_PARAM_10:  return "RMX_INVALID_PARAM_10";
+    /* System-related status codes */
+    /** Interruption signal was captured by Rivermax */
+    case RMX_SIGNAL: return "RMX_SIGNAL";
+  }
+  return "unknow rmx_status";
+}
 
 struct rmax_sentry
 {
@@ -102,7 +177,7 @@ struct error_category : std::error_category
 
 
 [[nodiscard]] rmax_sentry initialize();
-[[nodiscard]] rmax_sentry initialize(rmax_init_config* init_config);
+//[[nodiscard]] rmax_sentry initialize(rmax_init_config* init_config);
 
 namespace detail {
 

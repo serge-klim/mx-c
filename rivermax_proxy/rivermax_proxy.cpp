@@ -248,7 +248,7 @@ void configure_environment_variables() {
       /* Verify version mismatch */
       (*get_version)(&rivermax_version.original.major, &rivermax_version.original.minor, &rivermax_version.original.release_number, &rivermax_version.original.build);
       assert(rivermax_version.original.major != 0);
-      if (rivermax_version.original.major != RMAX_API_MAJOR || rivermax_version.original.minor < RMAX_API_MINOR) {
+      if (rivermax_version.original.major != RMX_VERSION_MAJOR || rivermax_version.original.minor < RMX_VERSION_MINOR) {
          if (!config()["ignore-version-mismatch"].as<bool>()) {
             BOOST_LOG_SEV(logger::get(), boost::log::trivial::error) << "Rivermax version mismatch , this proxy compiled for " << RMAX_API_MAJOR << '.' << RMAX_API_MINOR << '.' << RMAX_RELEASE_VERSION << '.' << RMAX_BUILD
                                                                      << "\n but \"" << rivermax_path << "\" is " << rivermax_version.original.major << '.' << rivermax_version.original.minor << '.' 

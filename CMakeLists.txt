@@ -9,6 +9,8 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
+#cmake_policy(SET CMP0074 NEW)
+
 project ("mx-c" 
 	      LANGUAGES
 			CXX #ASM_MASM
@@ -25,3 +27,4 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
  add_subdirectory ("asio")
  add_subdirectory(${toolz_DIR}/utils ${CMAKE_CURRENT_BINARY_DIR}/utils)
  add_subdirectory(${toolz_DIR}/utils/program_options ${CMAKE_CURRENT_BINARY_DIR}/utils/program_options)
+ add_subdirectory(${toolz_DIR}/utils/flags ${CMAKE_CURRENT_BINARY_DIR}/utils/flags)
