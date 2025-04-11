@@ -95,6 +95,7 @@ BOOST_FUSION_ADAPT_STRUCT(rmax_jump_table,
                           cleanup,
                           get_version_string,
                           get_version,
+                          get_version_numbers_v1,
                           init_version,
                           init,
                           in_create_stream,
@@ -204,10 +205,17 @@ void configure_environment_variables() {
    auto const rio = config()["rio"].as<bool>();
    boost::mp11::mp_for_each<boost::mp11::mp_iota_c<boost::fusion::result_of::size<rmax_jump_table /*decltype(jump_table)*/>::value>>([&res, module, rivermax, trace, rio](auto Ix) {      
       static auto const prefix = std::string{"rmax_"};
-      auto const name = prefix + boost::fusion::extension::struct_member_name<rmax_jump_table /*decltype(jump_table)*/, Ix>::call();
+      auto name = prefix + boost::fusion::extension::struct_member_name<rmax_jump_table /*decltype(jump_table)*/, Ix>::call();
       {
          if(auto f = boost::winapi::get_proc_address(rivermax, name.c_str()))
             boost::fusion::at_c<Ix>(jump_table[0]) = reinterpret_cast<typename boost::fusion::result_of::value_at_c<rmax_jump_table /*decltype(jump_table)*/, Ix>::type>(f);
+         else {
+            static auto const rmx = std::string{"rmx_"};
+            name = rmx + boost::fusion::extension::struct_member_name<rmax_jump_table /*decltype(jump_table)*/, Ix>::call();
+            f = boost::winapi::get_proc_address(rivermax, name.c_str());
+            if (f)
+               boost::fusion::at_c<Ix>(jump_table[0]) = reinterpret_cast<typename boost::fusion::result_of::value_at_c<rmax_jump_table /*decltype(jump_table)*/, Ix>::type>(f);
+         }
          if(!boost::fusion::at_c<Ix>(jump_table[0]))
             res = boost::system::error_code(boost::winapi::GetLastError(), boost::system::system_category());
       }
@@ -281,6 +289,7 @@ void configure_environment_variables() {
                                                                        << rivermax_version.imposed.build << ')';
 
             get_version = &diversion_rmax_get_version;
+            original_call_slot(&rmax_jump_table::get_version_numbers_v1) = &diversion_rmx_get_version_numbers_v1;
 
          } else {
             BOOST_LOG_SEV(logger::get(), boost::log::trivial::error) << "unable to parse configured version \"" << version_string << " ignoring it...";
@@ -318,6 +327,12 @@ rmax_status_t diversion_rmax_get_version(unsigned* major_version, unsigned* mino
    return RMAX_OK;
 }
 
+rmx_version const* diversion_rmx_get_version_numbers_v1()
+{
+   static auto ver = rmx_version{rivermax_version.imposed.major, rivermax_version.imposed.minor, rivermax_version.imposed.release_number};
+   return &ver;
+}
+
 rmax_status_t diversion_rmax_get_version_long(unsigned* major_version, unsigned* minor_version,
                                               unsigned* release_number, unsigned* build)
 {
@@ -331,7 +346,7 @@ rmax_status_t diversion_rmax_get_version_long(unsigned* major_version, unsigned*
 ////////////////////////////////////////////////////////////////////////////////////
 const char* proxy_rmax_get_version_string()
 {
-   configure_environment_variables();
+   //configure_environment_variables();
    return (*enty_jump_table().get_version_string)();
    
    //rmax_jump_table jump_table;
@@ -341,6 +356,13 @@ const char* proxy_rmax_get_version_string()
    //return nullptr;
 }
 
+rmx_version const* proxy_rmx_get_version_numbers_v1()
+{
+   //configure_environment_variables();
+   return (*enty_jump_table().get_version_numbers_v1)();
+}
+
+
 rmax_status_t proxy_rmax_cleanup() 
 { 
 	return (*enty_jump_table().cleanup)(); 
@@ -348,7 +370,7 @@ rmax_status_t proxy_rmax_cleanup()
 
 rmax_status_t proxy_rmax_get_version(unsigned* major_version, unsigned* minor_version, unsigned* release_number, unsigned* build) 
 {  
-    configure_environment_variables();
+    //configure_environment_variables();
 	return (*enty_jump_table().get_version)(major_version,minor_version, release_number, build);
 }
 

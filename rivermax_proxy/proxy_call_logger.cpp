@@ -82,11 +82,19 @@ const char* log_rmax_get_version_string() {
     return res;
 }
 
+rmx_version const* log_rmx_get_version_numbers_v1()
+{
+   auto res = (*pop_jump_table().get_version_numbers_v1)();
+   BOOST_LOG_SEV(logger::get(), boost::log::trivial::info) << "rmx_get_version_numbers_v1() -> " << res->major << '.' << res->minor << '.' << res->patch;
+   return res;
+}
+
+
 rmax_status_t log_rmax_init_version(unsigned major_version, unsigned minor_version, struct rmax_init_config* init_config) {
     auto res = (*pop_jump_table().init_version)(major_version, minor_version, init_config);
 
     static_assert(sizeof(init_config->cpu_mask.rmax_bits[0]) <= sizeof(unsigned long long), "cpu dumping needs to be updated!");
-    auto cpu_mask = std::bitset<sizeof(init_config->cpu_mask.rmax_bits) / sizeof(std::uint8_t) * 8>{};
+    auto cpu_mask = std::bitset<sizeof(init_config->cpu_mask.rmax_bits) / (sizeof(std::uint8_t) * 8)>{};
     boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(init_config->cpu_mask.rmax_bits)/sizeof(init_config->cpu_mask.rmax_bits[0])>>([&](auto I) {
        cpu_mask |= (decltype(cpu_mask){init_config->cpu_mask.rmax_bits[I]} << I * sizeof(sizeof(init_config->cpu_mask.rmax_bits[0]) / sizeof(std::uint8_t) * 8));
     });
@@ -99,7 +107,7 @@ rmax_status_t log_rmax_init(struct rmax_init_config* init_config) {
     auto res = (*pop_jump_table().init)(init_config);
 
     static_assert(sizeof(init_config->cpu_mask.rmax_bits[0]) <= sizeof(unsigned long long), "cpu dumping needs to be updated!");
-    auto cpu_mask = std::bitset<sizeof(init_config->cpu_mask.rmax_bits) / sizeof(std::uint8_t) * 8>{};
+    auto cpu_mask = std::bitset<sizeof(init_config->cpu_mask.rmax_bits) / (sizeof(std::uint8_t) * 8)>{};
     boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(init_config->cpu_mask.rmax_bits)/sizeof(init_config->cpu_mask.rmax_bits[0])>>([&](auto I) {
        cpu_mask |= (decltype(cpu_mask){init_config->cpu_mask.rmax_bits[I]} << I * sizeof(sizeof(init_config->cpu_mask.rmax_bits[0]) / sizeof(std::uint8_t) * 8));
     });

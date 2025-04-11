@@ -14,9 +14,9 @@ target_link_libraries(rio_sockperf_echo
 				Boost::disable_autolinking
 				Boost::log
 				Boost::log_setup
-				utils_program_options
-				utils_program_options_log
-				utils_nic_addresses
+				fb::fb_utils::program_options
+				fb::fb_utils::program_options::log
+				fb::fb_utils::nic_addresses
 			)
 
 set_property(TARGET rio_sockperf_echo PROPERTY CXX_STANDARD 20)

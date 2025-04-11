@@ -12,6 +12,8 @@ struct rmax_jump_table
    //decltype(&::rmax_init_version) init_version;
    //decltype(&::rmax_init) init;
    decltype(&diversion_rmax_get_version) get_version;
+   decltype(&::rmx_get_version_numbers_v1) get_version_numbers_v1;
+   //decltype(&::diversion_rmx_get_version_numbers_v1) get_version_numbers_v1;
    decltype(&diversion_rmax_init_version) init_version;
    decltype(&diversion_rmax_init) init;
    decltype(&::rmax_in_create_stream) in_create_stream;

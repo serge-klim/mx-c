@@ -1,3 +1,4 @@
+#include "loggers.hpp"
 #include "utility.hpp"
 #include "Windows.h"
 #include <string>
@@ -42,6 +43,7 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reason_for_call, LPVOID)
           if (auto size = GetModuleFileName(module, config_filename.data(), static_cast<DWORD>(config_filename.size())); size != 0 && size < config_filename.size()) {
              config_filename.resize(size);
              config_filename += ".config";
+             BOOST_LOG_SEV(logger::get(), boost::log::trivial::info) << "rivermax-proxy: loading configuration file \"" << config_filename << "\"...";
              if (auto ifs = std::fstream{ config_filename }) {
                 boost::program_options::options_description config_file_options;
                 config_file_options.add(description);
@@ -51,12 +53,18 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reason_for_call, LPVOID)
                 init_log_from_unrecognized_program_options(parsed, config());
              }
           }
+          else {
+              BOOST_LOG_SEV(logger::get(), boost::log::trivial::error) << "rivermax-proxy: unable to load configuration file \"" << config_filename << '"';
+          }
           if (vm["wait-for-debugger"].as<bool>())
              wait_for_debbuger();
           auto const error = initialize(module);
           auto res = !error;
-          if(!res)
-              SetLastError(static_cast<DWORD>(error.value()));
+          if(!res){
+              auto error_code = static_cast<DWORD>(error.value());
+              ::SetLastError(error_code);
+              BOOST_LOG_SEV(logger::get(), boost::log::trivial::fatal) << "rivermax-proxy: initialization failed : " << error.message() <<'(' << error_code << ')' ;
+           }
            return res;
       }
       case DLL_THREAD_ATTACH:

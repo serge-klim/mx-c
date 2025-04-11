@@ -218,11 +218,10 @@ BOOST_AUTO_TEST_CASE(rmax_concurrent_ch_send_test)
 
     unsigned int api_major;
     unsigned int api_minor;
-    unsigned int release;
-    unsigned int build;
+    unsigned int patch_ver;
 
     /* Verify version mismatch */
-    rmax_get_version(&api_major, &api_minor, &release, &build);
+    rmax_get_version(&api_major, &api_minor, &patch_ver);
 
     boost::asio::io_context ioctx;
     auto source_address = boost::asio::ip::make_address(multicast_address);

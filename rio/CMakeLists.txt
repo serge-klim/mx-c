@@ -48,7 +48,7 @@ add_executable (rio_test
 target_link_libraries(rio_test
 		PRIVATE
         mx-c::rio
-		utils
+		fb::fb_utils
 		Boost::unit_test_framework
 )
 

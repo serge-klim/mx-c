@@ -67,7 +67,7 @@ void echo(boost::program_options::variables_map const& options, rmaxx::rx_channe
    auto source = options["source"].as<net::endpoint>();
    sockaddr_in mcast;
    mcast.sin_family = AF_INET;
-   mcast.sin_addr.s_addr = htonl(boost::asio::ip::make_address(source.host).to_v4().to_ulong());
+   mcast.sin_addr.s_addr = htonl(boost::asio::ip::make_address(source.host).to_v4().to_uint());
    mcast.sin_port = htons(source.port);
    rx.join(mcast);
    auto n = options["packets"].as<std::size_t>();

@@ -177,7 +177,7 @@ struct error_category : std::error_category
 
 
 [[nodiscard]] rmax_sentry initialize();
-//[[nodiscard]] rmax_sentry initialize(rmax_init_config* init_config);
+[[nodiscard]] rmax_sentry initialize(rmax_init_config* init_config);
 
 namespace detail {
 
