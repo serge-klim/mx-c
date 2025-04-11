@@ -1,6 +1,6 @@
 ﻿#find_package(Rivermax MODULE REQUIRED)
 find_package(Rivermax 1.51.6 REQUIRED)
-find_package(Boost COMPONENTS program_options log log_setup filesystem unit_test_framework REQUIRED )
+find_package(Boost COMPONENTS log log_setup unit_test_framework REQUIRED )
 
 
 
@@ -36,8 +36,7 @@ target_link_libraries(rmaxx
 				Boost::disable_autolinking
 				Boost::log
 				Boost::log_setup
-		#        Boost::program_options
-				utils
+				fb::fb_utils
 			)
 
 #target_include_directories(rmaxx INTERFACE ..)
@@ -52,7 +51,7 @@ add_executable (rmaxx_utils_test
 target_link_libraries(rmaxx_utils_test
 		PRIVATE
         mx-c::rmaxx
-		utils::utils
+		fb::fb_utils
 		Boost::unit_test_framework
 		Boost::disable_autolinking
 )

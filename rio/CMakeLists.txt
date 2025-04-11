@@ -1,5 +1,5 @@
 ﻿find_package(Rivermax REQUIRED)
-find_package( Boost COMPONENTS program_options log log_setup filesystem unit_test_framework REQUIRED )
+find_package( Boost COMPONENTS log log_setup unit_test_framework REQUIRED )
 
 # Add source to this project's executable.
 add_library (rio
@@ -30,8 +30,7 @@ target_link_libraries(rio
 				Boost::disable_autolinking
 				Boost::log
 				Boost::log_setup
-		#        Boost::program_options
-				utils::utils
+				fb::fb_utils
 			)
 
 

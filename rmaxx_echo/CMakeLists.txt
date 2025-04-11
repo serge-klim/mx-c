@@ -15,9 +15,9 @@ target_link_libraries(rmaxx_echo
 				Boost::disable_autolinking
 				Boost::log
 				Boost::log_setup
-				utils::program_options
-				utils::program_options::log
-				utils::nic_addresses
+				fb::fb_utils::program_options
+				fb::fb_utils::program_options::log
+				fb::fb_utils::nic_addresses
 			)
 
 set_property(TARGET rmaxx_echo PROPERTY CXX_STANDARD 23)

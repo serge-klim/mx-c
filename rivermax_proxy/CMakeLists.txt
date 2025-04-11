@@ -30,7 +30,7 @@ target_link_libraries(rivermax_proxy
 #		Rivermax::Rivermax
         mx-c::rmaxx
 		mx-c::rio
-		utils::utils
+		fb::fb_utils
         Boost::boost
 		Boost::disable_autolinking
         Boost::program_options
@@ -61,8 +61,8 @@ add_executable (rivermax_proxy_test
 target_link_libraries(rivermax_proxy_test
 		PRIVATE
 	    mx-c::rmaxx
-		utils::utils
-		utils::nic_addresses
+		fb::fb_utils
+		fb::fb_utils::nic_addresses
 		Boost::unit_test_framework
 )
 

@@ -34,7 +34,7 @@ using message_size_t  = std::uint32_t;
 
 constexpr/*consteval*/ auto header_size() noexcept { return sizeof(seqn_t) + sizeof(type) + sizeof(message_size_t); }
 
-[[nodiscard]] inline /*constexpr*/ seqn_t seqn(void const* packet, std::size_t size) noexcept
+[[nodiscard]] inline /*constexpr*/ seqn_t seqn(void const* packet, [[maybe_unused]] std::size_t size) noexcept
 {
    seqn_t res;
    assert(sizeof(res) <= size);
@@ -42,7 +42,7 @@ constexpr/*consteval*/ auto header_size() noexcept { return sizeof(seqn_t) + siz
    return boost::endian::big_to_native(res);
 }
 
-inline void seqn(seqn_t value, void* packet, std::size_t size) noexcept
+inline void seqn(seqn_t value, void* packet, [[maybe_unused]] std::size_t size) noexcept
 {
    assert(sizeof(value) <= size);
    boost::endian::native_to_big_inplace(value);
@@ -58,7 +58,7 @@ inline void seqn(seqn_t value, void* packet, std::size_t size) noexcept
 //   return boost::endian::big_to_native(res);
 //}
 
-[[nodiscard]] inline /*constexpr*/ type message_type(void const* packet, std::size_t size) noexcept
+[[nodiscard]] inline /*constexpr*/ type message_type(void const* packet, [[maybe_unused]] std::size_t size) noexcept
 {
    type res;
    assert(sizeof(seqn_t) + sizeof(res) <= size);
@@ -66,7 +66,7 @@ inline void seqn(seqn_t value, void* packet, std::size_t size) noexcept
    return boost::endian::big_to_native(res);
 }
 
-inline void message_type(type value, void* packet, std::size_t size) noexcept
+inline void message_type(type value, void* packet, [[maybe_unused]] std::size_t size) noexcept
 {
    assert(sizeof(seqn_t) + sizeof(type) <= size);
    boost::endian::native_to_big_inplace(value);
@@ -74,7 +74,7 @@ inline void message_type(type value, void* packet, std::size_t size) noexcept
    assert(message_type(packet, size) == boost::endian::big_to_native(value));
 }
 
-[[nodiscard]] inline /*constexpr*/ message_size_t message_size(void const* packet, std::size_t size) noexcept
+[[nodiscard]] inline /*constexpr*/ message_size_t message_size(void const* packet, [[maybe_unused]] std::size_t size) noexcept
 {
    message_size_t res;
    assert(sizeof(seqn_t) + sizeof(type) + sizeof(res) <= size);
@@ -82,7 +82,7 @@ inline void message_type(type value, void* packet, std::size_t size) noexcept
    return boost::endian::big_to_native(res);
 }
 
-inline void message_size(message_size_t value, void* packet, std::size_t size) noexcept
+inline void message_size(message_size_t value, void* packet, [[maybe_unused]] std::size_t size) noexcept
 {
    boost::endian::native_to_big_inplace(value);
    assert(sizeof(seqn_t) + sizeof(type) + sizeof(value) <= size);
@@ -90,13 +90,13 @@ inline void message_size(message_size_t value, void* packet, std::size_t size) n
    assert(message_size(packet, size) == boost::endian::big_to_native(value));
 }
 
-[[nodiscard]] inline constexpr void* payload(void* packet, std::size_t size) noexcept
+[[nodiscard]] inline constexpr void* payload(void* packet, [[maybe_unused]] std::size_t size) noexcept
 {
    assert(header_size() <= size);
    return static_cast<char*>(packet) + header_size();
 }
 
-[[nodiscard]] inline constexpr void const* payload(void const* packet, std::size_t size) noexcept
+[[nodiscard]] inline constexpr void const* payload(void const* packet, [[maybe_unused]] std::size_t size) noexcept
 {
    assert(header_size() <= size);
    return static_cast<char const*>(packet) + header_size();

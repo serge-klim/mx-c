@@ -158,7 +158,10 @@ F& original_call_slot(F rmax_jump_table::*f) noexcept
 
 void configure_environment_variables() {
    auto setenv = [](const char* name, const char* value) noexcept {
-       if (!SetEnvironmentVariable(name, value)) {
+      auto var = std::string{name};
+      var += '=';
+      var += value;
+       if (_putenv(var.c_str()) !=0/*!SetEnvironmentVariable(name, value)*/) {
           auto error = boost::system::error_code(boost::winapi::GetLastError(), boost::system::system_category());
           BOOST_LOG_SEV(logger::get(), boost::log::trivial::warning) << "unable to set environment variable" << name << '=' << value << ':' << error.message();
       }
@@ -167,19 +170,17 @@ void configure_environment_variables() {
       //_putenv(("RIVERMAX_LOG_FILE =" + rivermax_log_file.as<std::string>()).c_str());
       setenv("RIVERMAX_LOG_FILE", rivermax_log_file.as<std::string>().c_str());
    if (config()["verbose"].as<bool>()) {
-      //_putenv("RIVERMAX_LOG_LEVEL=6");
-      //_putenv("RIVERMAX_DISABLE_STDOUT_LOG=1");
-      setenv("RIVERMAX_LOG_LEVEL", "6");
-      setenv("RIVERMAX_DISABLE_STDOUT_LOG", "1");
-      if (auto environment = std::unique_ptr<char, decltype(&FreeEnvironmentStringsA)>{GetEnvironmentStringsA(), &FreeEnvironmentStringsA}) {
-         auto variable = environment.get();
-         do {
-            auto view = std::string_view{variable};
-            if (boost::algorithm::icontains(view, "RIVERMAX"))
-               BOOST_LOG_SEV(logger::get(), boost::log::trivial::info) << view;
-            variable += view.length() + 1;
-         } while (*variable != '\0');
-      }
+      setenv("RIVERMAX_LOG_LEVEL", "1");
+      setenv("RIVERMAX_DISABLE_STDOUT_LOG", "0");
+   }
+   if (auto environment = std::unique_ptr<char, decltype(&FreeEnvironmentStringsA)>{GetEnvironmentStringsA(), &FreeEnvironmentStringsA}) {
+      auto variable = environment.get();
+      do {
+         auto view = std::string_view{variable};
+         if (boost::algorithm::icontains(view, "RIVERMAX"))
+            BOOST_LOG_SEV(logger::get(), boost::log::trivial::info) << view;
+         variable += view.length() + 1;
+      } while (*variable != '\0');
    }
 }
 
@@ -250,14 +251,14 @@ void configure_environment_variables() {
       assert(rivermax_version.original.major != 0);
       if (rivermax_version.original.major != RMX_VERSION_MAJOR || rivermax_version.original.minor < RMX_VERSION_MINOR) {
          if (!config()["ignore-version-mismatch"].as<bool>()) {
-            BOOST_LOG_SEV(logger::get(), boost::log::trivial::error) << "Rivermax version mismatch , this proxy compiled for " << RMAX_API_MAJOR << '.' << RMAX_API_MINOR << '.' << RMAX_RELEASE_VERSION << '.' << RMAX_BUILD
+            BOOST_LOG_SEV(logger::get(), boost::log::trivial::error) << "Rivermax version mismatch , this proxy compiled for " << RMX_VERSION_MAJOR << '.' << RMX_VERSION_MINOR << '.' << RMX_VERSION_PATCH
                                                                      << "\n but \"" << rivermax_path << "\" is " << rivermax_version.original.major << '.' << rivermax_version.original.minor << '.' 
                                                                      << rivermax_version.original.release_number << '.' << rivermax_version.original.build
                                                                      << "\n please set ignore-version-mismatch to true in the configuration file : \"" << rivermax_path << ".config\" to ignore versions mismatch ";
 
             return make_error_code(boost::system::errc::not_supported);
          }
-         BOOST_LOG_SEV(logger::get(), boost::log::trivial::warning) << "WARNING! Rivermax version mismatch , this proxy compiled for " << RMAX_API_MAJOR << '.' << RMAX_API_MINOR << '.' << RMAX_RELEASE_VERSION << '.' << RMAX_BUILD
+         BOOST_LOG_SEV(logger::get(), boost::log::trivial::warning) << "WARNING! Rivermax version mismatch , this proxy compiled for " << RMX_VERSION_MAJOR << '.' << RMX_VERSION_MINOR << '.' << RMX_VERSION_PATCH
                                                                     << "\n but \"" << rivermax_path << "\" is " << rivermax_version.original.major << '.' << rivermax_version.original.minor << '.'
                                                                     << rivermax_version.original.release_number << '.' << rivermax_version.original.build;
       }

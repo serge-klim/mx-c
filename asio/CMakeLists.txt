@@ -10,8 +10,8 @@ add_executable (echo
 
 target_link_libraries(echo
         sockperf
-        utils::program_options
-        utils::program_options::log
+        fb::fb_utils::program_options
+        fb::fb_utils::program_options::log
         Boost::boost
         Boost::program_options
         Boost::log

@@ -18,6 +18,16 @@ project ("mx-c"
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+include(FetchContent)
+
+FetchContent_Declare(
+		fb_utils
+		GIT_REPOSITORY https://github.com/serge-klim/fb_utils.git
+		GIT_TAG        7b4381a69bcbcb0f98f8c1f22076dbfba272e79d
+	)
+
+FetchContent_MakeAvailable(fb_utils)
+
  add_subdirectory ("rmaxx")
  add_subdirectory ("rmaxx_echo")
  add_subdirectory ("rivermax_proxy")
@@ -25,6 +35,3 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
  add_subdirectory ("rio")
  add_subdirectory ("sockperf")
  add_subdirectory ("asio")
- add_subdirectory(${toolz_DIR}/utils ${CMAKE_CURRENT_BINARY_DIR}/utils)
- add_subdirectory(${toolz_DIR}/utils/program_options ${CMAKE_CURRENT_BINARY_DIR}/utils/program_options)
- add_subdirectory(${toolz_DIR}/utils/flags ${CMAKE_CURRENT_BINARY_DIR}/utils/flags)
