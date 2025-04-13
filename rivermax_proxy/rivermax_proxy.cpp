@@ -301,20 +301,33 @@ void configure_environment_variables() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
+void handle_exception(char const * where) noexcept {
+   try {
+      throw;
+   } catch (std::exception& e) {
+      BOOST_LOG_SEV(logger::get(), boost::log::trivial::error) << where << " failed : " << e.what();
+   } catch (...) {
+      BOOST_LOG_SEV(logger::get(), boost::log::trivial::error) << where << " unexpectedly failed.";
+   }
+}
 
 
-rmax_status_t diversion_rmax_init(struct rmax_init_config* init_config)
-{
+rmax_status_t diversion_rmax_init(struct rmax_init_config* init_config) try {
    auto init_version = original_call_slot(&rmax_jump_table::init_version);
    return (*init_version)(rivermax_version.original.major, rivermax_version.original.minor, init_config);
+} catch (...) {
+   handle_exception("diversion_rmax_init");
+   return RMAX_ERR_UNKNOWN_ISSUE;
 }
 
 rmax_status_t diversion_rmax_init_version(unsigned /*api_major_version*/,
                                           unsigned /*api_minor_version*/,
-                                          struct rmax_init_config* init_config)
-{
+                                          struct rmax_init_config* init_config) try {
    auto init_version = original_call_slot(&rmax_jump_table::init);
    return (*init_version)(init_config);
+} catch (...) {
+   handle_exception("diversion_rmax_init_version");
+   return RMAX_ERR_UNKNOWN_ISSUE;
 }
 
 rmax_status_t diversion_rmax_get_version(unsigned* major_version, unsigned* minor_version,
@@ -374,7 +387,7 @@ rmax_status_t proxy_rmax_get_version(unsigned* major_version, unsigned* minor_ve
 	return (*enty_jump_table().get_version)(major_version,minor_version, release_number, build);
 }
 
-rmax_status_t proxy_rmax_init_version(unsigned major_version, unsigned minor_version, struct rmax_init_config* init_config)
+rmax_status_t proxy_rmax_init_version(unsigned major_version, unsigned minor_version, struct rmax_init_config* init_config) try
 {
    configure_environment_variables();
    if (rivermax_version.imposed.major != 0) {
@@ -383,12 +396,19 @@ rmax_status_t proxy_rmax_init_version(unsigned major_version, unsigned minor_ver
       minor_version = rivermax_version.original.minor;
    }
    return (*enty_jump_table().init_version)(major_version, minor_version, init_config);
+} catch (...) {
+   handle_exception("proxy_rmax_init_version");
+   return RMAX_ERR_UNKNOWN_ISSUE;
 }
 
-rmax_status_t proxy_rmax_init(struct rmax_init_config* init_config)
+
+rmax_status_t proxy_rmax_init(struct rmax_init_config* init_config) try
 {
    configure_environment_variables();
    return (*enty_jump_table().init)(init_config);
+} catch (...) {
+   handle_exception("rmax_init");
+   return RMAX_ERR_UNKNOWN_ISSUE;
 }
 
 rmax_status_t proxy_rmax_in_destroy_stream(rmax_stream_id id) 
